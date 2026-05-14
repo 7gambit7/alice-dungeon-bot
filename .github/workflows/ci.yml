@@ -86,3 +86,28 @@ jobs:
           clang-format-22 --version
           find src -type f \( -name '*.cpp' -o -name '*.h' \) -print0 \
             | xargs -0 clang-format-22 --dry-run --Werror
+
+  clang-tidy:
+    name: clang-tidy-22
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install clang-tidy-22
+        run: |
+          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc > /dev/null
+          echo "deb http://apt.llvm.org/$(lsb_release -cs)/ llvm-toolchain-$(lsb_release -cs)-22 main" | sudo tee /etc/apt/sources.list.d/llvm-22.list
+          sudo apt-get update
+          sudo apt-get install -y clang-tidy-22 clang cmake
+
+      - name: Configure (export compile_commands.json)
+        env:
+          CC: clang
+          CXX: clang++
+        run: cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Run clang-tidy-22
+        run: |
+          clang-tidy-22 --version
+          find src -type f -name '*.cpp' -print0 \
+            | xargs -0 clang-tidy-22 -p build

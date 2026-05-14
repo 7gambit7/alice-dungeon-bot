@@ -35,7 +35,8 @@ void AliceBot::run(Dungeon dungeon, std::ostream& out) {
   };
 
   auto pickHighestPresent = [&](int roomId) -> int {
-    int bestRes = -1, bestVal = -1;
+    int bestRes = -1;
+    int bestVal = -1;
     for (int k = 0; k < 4; k++) {
       if (rooms[roomId].resources[k] > 0) {
         int v = resourceValue(k, target);
@@ -136,10 +137,11 @@ void AliceBot::run(Dungeon dungeon, std::ostream& out) {
 
   long long totalValue = 0;
   for (int k = 0; k < 4; k++) {
-    totalValue += (long long)gathered[k] * resourceValue(k, target);
+    totalValue +=
+        static_cast<long long>(gathered[k]) * resourceValue(k, target);
   }
   out << "result";
-  for (int k = 0; k < 4; k++) out << " " << gathered[k];
+  for (int g : gathered) out << " " << g;
   out << " " << totalValue << "\n";
 }
 
@@ -149,7 +151,7 @@ int AliceBot::chooseNextExplore(int current, const std::vector<bool>& visited,
     if (!visited[adj]) return adj;
   }
 
-  const int N = (int)rooms.size();
+  const int N = static_cast<int>(rooms.size());
 
   // BFS from current through visited rooms (recording distance to every
   // reachable room) P.S. visited rooms transit, unvisited rooms are reached but
@@ -168,7 +170,8 @@ int AliceBot::chooseNextExplore(int current, const std::vector<bool>& visited,
     }
   }
 
-  int targetRoom = -1, targetDist = INT_MAX;
+  int targetRoom = -1;
+  int targetDist = INT_MAX;
   for (int v = 0; v < N; v++) {
     if (visited[v] || dist[v] == -1) continue;
     if (dist[v] < targetDist ||

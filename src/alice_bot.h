@@ -9,6 +9,6 @@ class AliceBot : public IBot {
   void run(Dungeon dungeon, std::ostream& out) override;
 
  private:
-  int chooseNextExplore(int current, const std::vector<bool>& visited,
-                        const std::vector<Room>& rooms);
+  static int chooseNextExplore(int current, const std::vector<bool>& visited,
+                               const std::vector<Room>& rooms);
 };

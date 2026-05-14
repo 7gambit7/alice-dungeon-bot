@@ -14,10 +14,10 @@ static bool parseUint(const std::string& s, int& out) {
   long long val = 0;
   for (char c : s) {
     if (c < '0' || c > '9') return false;
-    val = val * 10 + (c - '0');
+    val = (val * 10) + (c - '0');
     if (val > 1000000) return false;
   }
-  out = (int)val;
+  out = static_cast<int>(val);
   return true;
 }
 
@@ -36,7 +36,7 @@ static bool parseIntList(const std::string& s, std::vector<int>& out,
   bool hasDigit = false;
   for (char c : s) {
     if (c >= '0' && c <= '9') {
-      cur = cur * 10 + (c - '0');
+      cur = (cur * 10) + (c - '0');
       if (cur > maxVal) return false;
       hasDigit = true;
     } else if (c == ',') {
@@ -76,7 +76,7 @@ ParseResult parseInput(const std::string& filename, Dungeon& d) {
     auto tokens = tokenize(line);
     if (tokens.size() != 2 && tokens.size() != 6) return {false, line};
 
-    int id;
+    int id = 0;
     if (!parseUint(tokens[0], id) || id < 0 || id > N) return {false, line};
     if (defined[id]) return {false, line};
 
@@ -92,7 +92,7 @@ ParseResult parseInput(const std::string& filename, Dungeon& d) {
 
     if (tokens.size() == 6) {
       for (int k = 0; k < 4; k++) {
-        int rv;
+        int rv = 0;
         if (!parseUint(tokens[2 + k], rv) || rv < 0 || rv > 255) {
           return {false, line};
         }
@@ -126,7 +126,7 @@ ParseResult parseInput(const std::string& filename, Dungeon& d) {
   stripCr(line);
   auto tokens = tokenize(line);
   if (tokens.size() != 2) return {false, line};
-  int M;
+  int M = 0;
   if (!parseUint(tokens[0], M) || M < 2 || M > 255) return {false, line};
   int t = -1;
   for (int k = 0; k < 4; k++) {
