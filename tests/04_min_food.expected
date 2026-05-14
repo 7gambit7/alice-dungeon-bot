@@ -1,0 +1,6 @@
+go 1
+state 1 0 0 1 0
+collect gems
+state 1 0 0 _ 0
+go 0
+result 0 0 1 0 46

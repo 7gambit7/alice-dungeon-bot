@@ -1,0 +1,18 @@
+go 1
+state 1 10 10 10 10
+collect gems
+state 1 10 10 _ 10
+go 0
+state 0 0 0 0 0
+go 2
+state 2 5 5 5 5
+collect gems
+state 2 5 5 _ 5
+collect gold
+state 2 5 _ _ 5
+collect iron
+state 2 _ _ _ 5
+collect exp
+state 2 _ _ _ _
+go 0
+result 5 5 15 5 495
