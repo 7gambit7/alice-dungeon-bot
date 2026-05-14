@@ -2,14 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
   pull_request:
-    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
     name: build (${{ matrix.compiler }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -21,7 +23,7 @@ jobs:
             cc: clang
             cxx: clang++
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install compiler
         run: |
@@ -42,9 +44,9 @@ jobs:
 
   sanitizers:
     name: sanitizers (ASan + UBSan)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install compiler
         run: |
@@ -68,9 +70,9 @@ jobs:
 
   format-check:
     name: clang-format-22
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install clang-format-22
         run: |
