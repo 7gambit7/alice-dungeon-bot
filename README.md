@@ -1,5 +1,8 @@
 # alice-dungeon-bot
 
+[![CI](https://github.com/7gambit7/alice-dungeon-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/7gambit7/alice-dungeon-bot/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Симуляция бота Алисы, обходящего подземелье, собирающего ресурсы и расходующего еду.
 
 Идеи по улучшению алгоритма - в [`improvements.md`](improvements.md).
@@ -63,7 +66,7 @@ tests/
   *.in / *.expected            тестовые пары
   run_tests.sh                 раннер
   gen_stress.sh                генератор стресс-теста
-.github/workflows/ci.yml       CI: build (gcc+clang), tests, sanitizers, clang-format
+.github/workflows/ci.yml       CI: build (gcc+clang), tests, sanitizers, clang-format, clang-tidy
 ```
 
 ## CI
@@ -73,11 +76,19 @@ GitHub Actions прогоняет на каждый push/PR:
 - все тесты (`ctest`)
 - сборку с ASan + UBSan и тесты
 - проверку форматирования через `clang-format-22`
+- статический анализ через `clang-tidy-22`
 
-## Стиль кода
+## Стиль и статический анализ
 
-`clang-format-22` с базой `Google` (см. [`.clang-format`](.clang-format)). Перед коммитом:
+Форматирование: `clang-format-22` с базой `Google` (см. [`.clang-format`](.clang-format)). Перед коммитом:
 
 ```bash
 clang-format-22 -i src/*.cpp src/*.h
+```
+
+Статический анализ: `clang-tidy-22` с набором проверок `bugprone-*`, `cppcoreguidelines-*`, `modernize-*`, `performance-*`, `readability-*` (см. [`.clang-tidy`](.clang-tidy), стилистические проверки отключены). Запуск локально:
+
+```bash
+cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+find src -name '*.cpp' | xargs clang-tidy-22 -p build
 ```
